@@ -22,5 +22,6 @@ class ProjectController extends Controller
             'description' => $data['description'],
             'owner_id'=>$user->id
         ]);
+        return response()->json('Project created!');
     }
 }

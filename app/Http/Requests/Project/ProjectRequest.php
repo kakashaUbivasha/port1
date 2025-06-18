@@ -24,7 +24,6 @@ class ProjectRequest extends FormRequest
         return [
             'name' => 'required|string|min:3|max:100',
             'description' => 'required|min:10|max:255|string',
-            'owner_id' => 'required|exists:users,id',
         ];
     }
 }
