@@ -48,11 +48,22 @@ class User extends Authenticatable implements JWTSubject
         'password' => 'hashed',
     ];
 
-    public function projects()
+    public function myProjects()
     {
         return $this->hasMany(Project::class);
     }
-
+    public function createdTasks()
+    {
+        return $this->hasMany(Task::class, 'created_by');
+    }
+    public function assignedTask()
+    {
+        return $this->hasMany(Task::class, 'assigned_to');
+    }
+    public function comments()
+    {
+        return $this->hasMany(Comment::class);
+    }
     public function getJWTIdentifier()
     {
         return $this->getKey();
