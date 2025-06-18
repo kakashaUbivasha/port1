@@ -7,13 +7,16 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 use Laravel\Sanctum\HasApiTokens;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 
 class User extends Authenticatable implements JWTSubject
 {
     use HasApiTokens, HasFactory, Notifiable;
-
+    protected $keyType = 'string';
+    protected $primaryKey = 'id';
+    public $incrementing = false;
     /**
      * The attributes that are mass assignable.
      *
@@ -61,5 +64,13 @@ class User extends Authenticatable implements JWTSubject
     public function setPasswordAttribute($value)
     {
         $this->attributes['password'] = Hash::make($value);
+    }
+    protected static function booted()
+    {
+        static::creating(function ($user) {
+            if (empty($user->id)) {
+                $user->id = (string) Str::uuid();
+            }
+        });
     }
 }

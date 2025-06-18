@@ -42,5 +42,9 @@ class AuthController extends Controller
             return response()->json(['error' => 'Invalid token'], 401);
         }
     }
+    public function me()
+    {
+        return response()->json(auth()->user());
+    }
 
 }
