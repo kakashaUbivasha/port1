@@ -24,4 +24,29 @@ class TaskController extends Controller
         $tasks = $taskService->createTask($user->id,$project, $data);
         return response()->json(['message'=>'Task created', 'tasks'=>$tasks], 200);
     }
+    public function show($id,$task_id)
+    {
+        $user = auth()->user();
+        $project = Project::where('owner_id', $user->id)->findOrFail($id);
+        $task = $project->tasks()->findOrFail($task_id);
+        return response()->json($task, 200);
+    }
+    public function update(TaskRequest $request, $id, $task_id, TaskService $taskService)
+    {
+        $user = auth()->user();
+        $data = $request->validated();
+        $task = $taskService->updateTask($user->id, $id, $task_id, $data);
+        return response()->json(['message'=>'Task updated', 'task'=>$task], 200);
+    }
+    public function destroy($id,$task_id, TaskService $taskService)
+    {
+        $user = auth()->user();
+        try{
+            $taskService->deleteTask($user->id, $id, $task_id);
+            return response()->json(['message'=>'Task deleted', 'task'=>$task_id], 200);
+        }catch (\Exception $e){
+            return response()->json(['message'=>'Task not deleted', 'reason'=>$e->getMessage()], 400);
+        }
+
+    }
 }

@@ -36,7 +36,7 @@ class AuthController extends Controller
             $newToken = JWTAuth::parseToken()->refresh();
 
             return response()->json([
-                'token' => $newToken
+                'new token' => $newToken
             ]);
         } catch (\Tymon\JWTAuth\Exceptions\TokenInvalidException $e) {
             return response()->json(['error' => 'Invalid token'], 401);

@@ -2,6 +2,7 @@
 
 namespace App\Service;
 
+use App\Models\Project;
 use App\Models\Task;
 
 class TaskService
@@ -24,5 +25,26 @@ class TaskService
         }
         Task::create($fields);
         return $project->tasks;
+    }
+    public function updateTask($userId, $projectId, $task_id, $data)
+    {
+        $project = Project::where('owner_id', $userId)->findOrFail($projectId);
+        $task = $project->tasks()->findOrFail($task_id);
+        $task->update($data);
+        return $task;
+    }
+    public function deleteTask($userId, $projectId, $task_id)
+    {
+        $project = Project::where('owner_id', $userId)->findOrFail($projectId);
+        if(!$project)
+        {
+            throw new \Exception("Project not found");
+        }
+        $task = $project->tasks()->findOrFail($task_id);
+        if(!$task)
+        {
+            throw new \Exception("Task not found");
+        }
+        $task->delete();
     }
 }
