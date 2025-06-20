@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ProjectController;
+use App\Http\Controllers\TagController;
 use App\Http\Controllers\TaskController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -34,4 +35,9 @@ Route::group(['middleware'=>'auth:api'], function (){
     Route::get('projects/{id}', [ProjectController::class, 'show']);
     Route::put('projects/{id}', [ProjectController::class, 'update']);
     Route::delete('projects/{id}', [ProjectController::class, 'destroy']);
+});
+Route::group(['middleware'=>'auth:api'], function (){
+   Route::get('tags', [TagController::class, 'index']);
+   Route::post('tags', [TagController::class, 'store']);
+   Route::delete('tags/{id}', [TagController::class, 'destroy']);
 });
