@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Service\GlobalService;
 use App\Service\TaskService;
 use Illuminate\Support\ServiceProvider;
 
@@ -14,6 +15,9 @@ class AppServiceProvider extends ServiceProvider
     {
         $this->app->singleton(TaskService::class, function ($app) {
             return new TaskService();
+        });
+        $this->app->singleton(GlobalService::class, function ($app) {
+            return new GlobalService();
         });
     }
 
