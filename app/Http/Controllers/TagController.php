@@ -18,7 +18,7 @@ class TagController extends Controller
             Tag::create($data);
             return response()->json(['message'=>'Tag created'], 201);
         }
-        public function destroy($id)
+        public function  destroy($id)
         {
             $tag = Tag::findOrFail($id);
             $tag->delete();

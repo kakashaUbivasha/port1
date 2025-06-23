@@ -6,7 +6,7 @@ use App\Http\Controllers\TagController;
 use App\Http\Controllers\TaskController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-
+use \App\Http\Controllers\CommentController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -19,6 +19,12 @@ use Illuminate\Support\Facades\Route;
 */
 Route::post('register', [AuthController::class, 'register']);
 Route::post('login', [AuthController::class, 'login']);
+Route::group(['middleware'=>'auth:api'], function (){
+    Route::get('projects/{id}/tasks/{task_id}/comments', [CommentController::class, 'index']);
+    Route::post('projects/{id}/tasks/{task_id}/comments', [CommentController::class, 'post']);
+    Route::put('projects/{id}/tasks/{task_id}/comments', [CommentController::class, 'update']);
+    Route::delete('projects/{id}/tasks/{task_id}/comments', [CommentController::class, 'destroy']);
+});
 Route::group(['middleware'=>'auth:api'], function (){
     Route::get('projects/{id}/tasks', [TaskController::class, 'index']);
     Route::post('projects/{id}/tasks', [TaskController::class, 'store']);
