@@ -20,10 +20,10 @@ use \App\Http\Controllers\CommentController;
 Route::post('register', [AuthController::class, 'register']);
 Route::post('login', [AuthController::class, 'login']);
 Route::group(['middleware'=>'auth:api'], function (){
-    Route::get('projects/{id}/tasks/{task_id}/comments', [CommentController::class, 'index']);
-    Route::post('projects/{id}/tasks/{task_id}/comments', [CommentController::class, 'post']);
-    Route::put('projects/{id}/tasks/{task_id}/comments', [CommentController::class, 'update']);
-    Route::delete('projects/{id}/tasks/{task_id}/comments', [CommentController::class, 'destroy']);
+    Route::get('projects/{project_id}/tasks/{task_id}/comments', [CommentController::class, 'index']);
+    Route::post('projects/{project_id}/tasks/{task_id}/comments', [CommentController::class, 'store']);
+    Route::put('projects/{project_id}/tasks/{task_id}/comments/{comment_id}', [CommentController::class, 'update']);
+    Route::delete('projects/{project_id}/tasks/{task_id}/comments/{comment_id}', [CommentController::class, 'destroy']);
 });
 Route::group(['middleware'=>'auth:api'], function (){
     Route::get('projects/{id}/tasks', [TaskController::class, 'index']);
