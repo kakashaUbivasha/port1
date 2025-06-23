@@ -7,6 +7,12 @@ use App\Models\Task;
 
 class TaskService
 {
+    protected $globalService;
+
+    public function __construct(GlobalService $globalService)
+    {
+        $this->globalService = $globalService;
+    }
     public function createTask($user_id, $project, $data)
     {
         $fields = [
@@ -28,14 +34,14 @@ class TaskService
     }
     public function updateTask($userId, $projectId, $task_id, $data)
     {
-        $project = Project::where('owner_id', $userId)->findOrFail($projectId);
+        $project =  $this->globalService->checkProject($userId, $projectId);
         $task = $project->tasks()->findOrFail($task_id);
         $task->update($data);
         return $task;
     }
     public function deleteTask($userId, $projectId, $task_id)
     {
-        $project = Project::where('owner_id', $userId)->findOrFail($projectId);
+        $project =  $this->globalService->checkProject($userId, $projectId);
         if(!$project)
         {
             throw new \Exception("Project not found");

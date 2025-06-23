@@ -5,29 +5,30 @@ namespace App\Http\Controllers;
 use App\Http\Requests\Task\TaskRequest;
 use App\Models\Project;
 use App\Models\Task;
+use App\Service\GlobalService;
 use App\Service\TaskService;
 use Illuminate\Http\Request;
 
 class TaskController extends Controller
 {
-    public function index($id)
+    public function index($id, GlobalService $service)
     {
         $user = auth()->user();
-        $project = Project::where('owner_id', $user->id)->findOrFail($id);
+        $project = $service->checkProject($user->id, $id);
         return response()->json($project->tasks, 200);
     }
-    public function store(TaskRequest $request, $id, TaskService $taskService)
+    public function store(TaskRequest $request, $id, TaskService $taskService, GlobalService $service)
     {
         $user = auth()->user();
-        $project = Project::where('owner_id', $user->id)->findOrFail($id);
+        $project = $service->checkProject($user->id, $id);
         $data = $request->validated();
         $tasks = $taskService->createTask($user->id,$project, $data);
         return response()->json(['message'=>'Task created', 'tasks'=>$tasks], 200);
     }
-    public function show($id,$task_id)
+    public function show($id,$task_id, GlobalService $service)
     {
         $user = auth()->user();
-        $project = Project::where('owner_id', $user->id)->findOrFail($id);
+        $project = $service->checkProject($user->id, $id);
         $task = $project->tasks()->findOrFail($task_id);
         return response()->json($task, 200);
     }
