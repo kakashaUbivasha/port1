@@ -43,7 +43,7 @@ class TaskService
         $task->update($data);
         if(isset($data['tags']))
         {
-            $task->tags()->attach($data['tags']);
+            $task->tags()->sync($data['tags']);
         }
         return $task;
     }
