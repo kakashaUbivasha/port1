@@ -29,7 +29,11 @@ class TaskService
         if (isset($data['priority'])) {
             $fields['priority'] = $data['priority'];
         }
-        Task::create($fields);
+        $task = Task::create($fields);
+        if(isset($data['tags']))
+        {
+            $task->tags()->attach($data['tags']);
+        }
         return $project->tasks;
     }
     public function updateTask($userId, $projectId, $task_id, $data)
@@ -37,6 +41,10 @@ class TaskService
         $project =  $this->globalService->checkProject($userId, $projectId);
         $task = $project->tasks()->findOrFail($task_id);
         $task->update($data);
+        if(isset($data['tags']))
+        {
+            $task->tags()->attach($data['tags']);
+        }
         return $task;
     }
     public function deleteTask($userId, $projectId, $task_id)
@@ -52,5 +60,6 @@ class TaskService
             throw new \Exception("Task not found");
         }
         $task->delete();
+        $task->tags()->detach();
     }
 }
